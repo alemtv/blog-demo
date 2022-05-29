@@ -1,0 +1,58 @@
+{% extends 'blog/base.html' %}
+{% block title %}
+  Django test project - Post List
+{% endblock %}
+{% block content %}
+{% load static %}
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url({% static 'blog/images/home-header.jpg' %});">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Django</h1>
+                            <span class="subheading">Test-Driven Web Development with Django</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <!-- Post preview-->
+                    {% for post in post_list %}
+                        <div class="post-preview">
+                            <p class="post-meta">
+                                <a href="{% url 'category_post_list' post.category|lower %}">{{ post.category }}</a>
+                            </p>
+
+                            <a href="{{ post.get_absolute_url }}">
+                                <h2 class="post-title">{{ post.title }}</h2>
+                            </a>
+                            <p class="post-subtitle">{{ post.short_description }}</p>
+                            <p class="post-meta">
+                                Posted by {{ post.author }} on {{ post.modified_time|date:'Y-m-d' }}
+                            </p>
+                        </div>
+                        <!-- Divider-->
+                        <hr class="my-4" />
+                    {% empty %}
+                        <div class="post-preview">
+                            No data found
+                        </div>
+                    {% endfor %}
+
+                     <!-- Pager-->
+                    {% if page_obj.has_previous %}
+                        <div class="d-flex justify-content-start mb-4"><a class="btn btn-primary text-uppercase" href="?page={{ page_obj.previous_page_number }}">← Newer posts</a></div>
+                    {% endif %}
+                    {% if page_obj.has_next %}
+                        <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="?page={{ page_obj.next_page_number }}">Older Posts →</a></div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+{% endblock %}
